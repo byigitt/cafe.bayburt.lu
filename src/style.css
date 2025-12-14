@@ -78,6 +78,35 @@ body {
   border: 2px inset #404040;
 }
 
+.opensource-badge {
+  background: #000000;
+  border: 2px inset #404040;
+  padding: 6px;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.opensource-badge a {
+  color: #ffff00;
+  text-decoration: none;
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+}
+
+.opensource-badge a:hover {
+  color: #00ff00;
+  text-decoration: underline;
+}
+
+.github-link {
+  color: #ffff00 !important;
+  text-decoration: none;
+}
+
+.github-link:hover {
+  color: #00ff00 !important;
+}
+
 .filter-box {
   background: #c0c0c0;
   border: 2px groove #808080;

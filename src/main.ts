@@ -115,6 +115,11 @@ function renderHome(): void {
       <div class="home-footer">
         <marquee scrollamount="2">Welcome to my cafe review page! I rate cafes I visit out of 10!</marquee>
       </div>
+      <div class="opensource-badge">
+        <a href="https://github.com/byigitt/cafe.bayburt.lu" target="_blank">
+          [OPEN SOURCE] View on GitHub
+        </a>
+      </div>
     </div>
   `
 
@@ -221,6 +226,8 @@ function renderCafePage(cafe: Cafe): void {
       <span>Best viewed with Netscape Navigator 4.0 @ 800x600</span>
       <span class="blink">|</span>
       <span>(c) ${new Date().getFullYear()} cafe.bayburt.lu</span>
+      <span class="blink">|</span>
+      <a href="https://github.com/byigitt/cafe.bayburt.lu" target="_blank" class="github-link">[GitHub]</a>
     </div>
   `
 }
