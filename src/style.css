@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -58,8 +59,13 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .home-subtitle {
@@ -80,15 +86,31 @@ body {
 
 .github-corner {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  color: #808080;
+  bottom: 20px;
+  left: 20px;
+  color: #000000;
   transition: color 0.2s;
   z-index: 100;
 }
 
 .github-corner:hover {
-  color: #000000;
+  color: #ffffff;
+}
+
+.goat-corner {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.goat-corner img {
+  width: 200px;
+  height: auto;
+  display: block;
+  transform: scale(1.25);
+  transform-origin: bottom right;
 }
 
 .filter-box {
@@ -393,9 +415,17 @@ body {
   padding-bottom: 2px;
 }
 
-.review-content h1 { font-size: 16px; }
-.review-content h2 { font-size: 14px; }
-.review-content h3 { font-size: 12px; }
+.review-content h1 {
+  font-size: 16px;
+}
+
+.review-content h2 {
+  font-size: 14px;
+}
+
+.review-content h3 {
+  font-size: 12px;
+}
 
 .review-content img {
   max-width: 100%;
@@ -524,6 +554,13 @@ body {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
