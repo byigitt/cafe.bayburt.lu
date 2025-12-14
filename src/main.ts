@@ -25,6 +25,32 @@ function getSlug(): string {
   return slug
 }
 
+function updateSEO(title: string, description: string, keywords: string, url: string): void {
+  document.title = title
+  
+  const setMeta = (name: string, content: string, isProperty = false) => {
+    const attr = isProperty ? 'property' : 'name'
+    let meta = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.setAttribute(attr, name)
+      document.head.appendChild(meta)
+    }
+    meta.content = content
+  }
+  
+  setMeta('description', description)
+  setMeta('keywords', keywords)
+  setMeta('og:title', title, true)
+  setMeta('og:description', description, true)
+  setMeta('og:url', url, true)
+  setMeta('twitter:title', title)
+  setMeta('twitter:description', description)
+  
+  let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
+  if (canonical) canonical.href = url
+}
+
 function createCafeListItem(cafe: Cafe): string {
   return `
     <a href="/${cafe.slug}" class="cafe-item">
@@ -41,6 +67,13 @@ function getCity(location: string): string {
 }
 
 function renderHome(): void {
+  updateSEO(
+    "Baris's Cafe Reviews - Kafe Degerlendirmeleri",
+    "Baris'in kafe degerlendirmeleri. Turkiye'deki kafeleri puanliyorum ve deneyimlerimi paylasiyorum.",
+    "kafe, cafe, kahve, coffee, review, degerlendirme, Turkiye, Ankara, Istanbul",
+    "https://cafe.bayburt.lu"
+  )
+  
   const allCafes = (cafes as Cafe[]).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   const cities = [...new Set(allCafes.map(c => getCity(c.location)))].sort()
   
@@ -107,6 +140,14 @@ function renderHome(): void {
 }
 
 function renderCafePage(cafe: Cafe): void {
+  const city = getCity(cafe.location)
+  updateSEO(
+    `${cafe.name} - ${cafe.rating}/10 | Baris's Cafe Reviews`,
+    `${cafe.name} kafe degerlendirmesi. ${cafe.location} - ${cafe.rating}/10 puan.`,
+    `${cafe.name}, ${city}, kafe, cafe, kahve, coffee, review, degerlendirme, ${cafe.rating}/10`,
+    `https://cafe.bayburt.lu/${cafe.slug}`
+  )
+  
   const visitorCount = Math.floor(Math.random() * 9000) + 1000
   const stars = '*'.repeat(cafe.rating) + '-'.repeat(10 - cafe.rating)
 
@@ -185,6 +226,13 @@ function renderCafePage(cafe: Cafe): void {
 }
 
 function render404(): void {
+  updateSEO(
+    "404 - Sayfa Bulunamadi | Baris's Cafe Reviews",
+    "Aradiginiz kafe bulunamadi.",
+    "404, bulunamadi, not found",
+    "https://cafe.bayburt.lu/404"
+  )
+  
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div class="error-page">
       <h1>404 - NOT FOUND</h1>
