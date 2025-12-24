@@ -12,10 +12,10 @@ interface Cafe {
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
   })
 }
 
@@ -27,7 +27,7 @@ function getSlug(): string {
 
 function updateSEO(title: string, description: string, keywords: string, url: string): void {
   document.title = title
-  
+
   const setMeta = (name: string, content: string, isProperty = false) => {
     const attr = isProperty ? 'property' : 'name'
     let meta = document.querySelector(`meta[${attr}="${name}"]`) as HTMLMetaElement
@@ -38,7 +38,7 @@ function updateSEO(title: string, description: string, keywords: string, url: st
     }
     meta.content = content
   }
-  
+
   setMeta('description', description)
   setMeta('keywords', keywords)
   setMeta('og:title', title, true)
@@ -46,7 +46,7 @@ function updateSEO(title: string, description: string, keywords: string, url: st
   setMeta('og:url', url, true)
   setMeta('twitter:title', title)
   setMeta('twitter:description', description)
-  
+
   let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
   if (canonical) canonical.href = url
 }
@@ -73,12 +73,17 @@ function renderHome(): void {
     "kafe, cafe, kahve, coffee, review, degerlendirme, Turkiye, Ankara, Istanbul",
     "https://cafe.bayburt.lu"
   )
-  
+
   const allCafes = (cafes as Cafe[]).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   const cities = [...new Set(allCafes.map(c => getCity(c.location)))].sort()
-  
+
   const cityOptions = cities.map(city => `<option value="${city}">${city}</option>`).join('')
   const cafeOptions = allCafes.map(cafe => `<option value="${cafe.slug}">${cafe.name}</option>`).join('')
+
+  // /goats/ klasöründeki tüm PNG dosyalarını otomatik al
+  const goatModules = import.meta.glob('/public/goats/*.png', { eager: true, as: 'url' })
+  const goatImages = Object.values(goatModules).map(url => url.replace('/public', ''))
+  const randomStart = Math.floor(Math.random() * goatImages.length)
 
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div class="home-container">
@@ -116,6 +121,9 @@ function renderHome(): void {
         <marquee scrollamount="2">Welcome to my cafe review page! I rate cafes I visit out of 10!</marquee>
       </div>
     </div>
+    <div class="goat-corner">
+      <img id="goat-image" src="${goatImages[randomStart]}" alt="Goat" />
+    </div>
     <a href="https://github.com/byigitt/cafe.bayburt.lu" target="_blank" class="github-corner" title="View on GitHub">
       <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor">
         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
@@ -129,7 +137,7 @@ function renderHome(): void {
 
   cityFilter.addEventListener('change', () => {
     const selectedCity = cityFilter.value
-    const filtered = selectedCity 
+    const filtered = selectedCity
       ? allCafes.filter(c => getCity(c.location) === selectedCity)
       : allCafes
     listContainer.innerHTML = filtered.map(createCafeListItem).join('')
@@ -152,7 +160,7 @@ function renderCafePage(cafe: Cafe): void {
     `${cafe.name}, ${city}, kafe, cafe, kahve, coffee, review, degerlendirme, ${cafe.rating}/10`,
     `https://cafe.bayburt.lu/${cafe.slug}`
   )
-  
+
   const visitorCount = Math.floor(Math.random() * 9000) + 1000
   const stars = '*'.repeat(cafe.rating) + '-'.repeat(10 - cafe.rating)
 
@@ -242,7 +250,7 @@ function render404(): void {
     "404, bulunamadi, not found",
     "https://cafe.bayburt.lu/404"
   )
-  
+
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div class="error-page">
       <h1>404 - NOT FOUND</h1>
@@ -255,7 +263,7 @@ function render404(): void {
 
 function router(): void {
   const slug = getSlug()
-  
+
   if (!slug || slug === 'index.html') {
     renderHome()
     return
